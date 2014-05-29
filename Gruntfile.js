@@ -35,15 +35,18 @@ module.exports = function( grunt ){
 	// Load NPM tasks to be used here
 	grunt.loadNpmTasks( 'grunt-shell' );
 	grunt.loadNpmTasks( 'grunt-wget' );
-	grunt.loadNpmTasks( 'grunt-contrib-clean' );
-	grunt.loadNpmTasks( 'grunt-contrib-compress' );
 
 	// Register tasks
-	grunt.registerTask( 'default', [
+	grunt.registerTask( 'default', function () {
+		grunt.log.writeln( "\n ################################################# " );
+		grunt.log.writeln( " ###### WooCommerce Language Pack Generator ###### " );
+		grunt.log.writeln( " ################################################# \n" );
+		grunt.log.writeln( " # Commands: \n" );
+		grunt.log.writeln( " grunt compile    =  Gets the Transifex translations, compiles the .mo files and generates zip files " );
+		grunt.log.writeln( " grunt resources  =  Gets the WooCommerce core .pot files and pushes on Transifex " );
+	});
 
-	]);
-
-	grunt.registerTask( 'update_resources', [
+	grunt.registerTask( 'resources', [
 		'wget:resources',
 		'shell:txpush'
 	]);
@@ -51,6 +54,37 @@ module.exports = function( grunt ){
 	grunt.registerTask( 'update_translations', [
 		'shell:txpull',
 		'shell:generatemos'
+	]);
+
+	grunt.registerTask( 'compress', function () {
+		var fs    = require( 'fs' ),
+			files = fs.readdirSync( 'languages/' ),
+			done  = this.async();
+
+		files.forEach( function ( file ) {
+			var lang = file.replace( /(^woocommerce-admin-)(.+)(.po)/, '$2' );
+			if ( lang !== file ) {
+				var dest = 'packages/' + lang + '.zip';
+				var zip  = new require('node-zip')();
+				zip.file( 'woocommerce-' + lang + '.po', fs.readFileSync( 'languages/woocommerce-' + lang + '.po' ) );
+				zip.file( 'woocommerce-' + lang + '.mo', fs.readFileSync( 'languages/woocommerce-' + lang + '.mo' ) );
+				zip.file( 'woocommerce-admin-' + lang + '.po', fs.readFileSync( 'languages/woocommerce-admin-' + lang + '.po' ) );
+				zip.file( 'woocommerce-admin-' + lang + '.mo', fs.readFileSync( 'languages/woocommerce-admin-' + lang + '.mo' ) );
+				var data = zip.generate({
+					base64: false,
+					compression: 'DEFLATE'
+				});
+				fs.writeFileSync( dest, data, 'binary' );
+				grunt.log.writeln( ' -> ' + lang + ': ' + dest + ' file created successfully' );
+			}
+		});
+
+		done();
+	});
+
+	grunt.registerTask( 'compile', [
+		'update_translations',
+		'compress'
 	]);
 
 };
