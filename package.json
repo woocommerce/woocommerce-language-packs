@@ -1,0 +1,19 @@
+{
+  "name": "woocommerce-language-packs",
+  "version": "1.0.0",
+  "title": "WooCommerce Language Packs",
+  "description": "WooCommerce Language Packs manager repository",
+  "homepage": "https://github.com/woothemes/woocommerce-language-packs",
+  "main": "Gruntfile.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/woothemes/woocommerce-language-packs.git"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.5"
+  },
+  "engines": {
+    "node": ">=0.8.0",
+    "npm": ">=1.1.0"
+  }
+}
