@@ -22,12 +22,22 @@ module.exports = function( grunt ){
 			},
 			txpull: {
 				command: 'tx pull -a -f' // pull the .po files
+			}
+		},
+
+		potomo: {
+			dist: {
+			options: {
+				poDel: false
 			},
-			generatemos: {
-				command: [
-					'cd languages',
-					'for i in *.po; do msgfmt $i -o ${i%%.*}.mo; done'
-				].join( '&&' )
+			files: [{
+					expand: true,
+					cwd: 'languages/',
+					src: ['*.po'],
+					dest: 'languages/',
+					ext: '.mo',
+					nonull: true
+				}]
 			}
 		}
 	});
@@ -35,6 +45,7 @@ module.exports = function( grunt ){
 	// Load NPM tasks to be used here
 	grunt.loadNpmTasks( 'grunt-shell' );
 	grunt.loadNpmTasks( 'grunt-wget' );
+	grunt.loadNpmTasks( 'grunt-potomo' );
 
 	// Register tasks
 	grunt.registerTask( 'default', function () {
@@ -53,7 +64,7 @@ module.exports = function( grunt ){
 
 	grunt.registerTask( 'update_translations', [
 		'shell:txpull',
-		'shell:generatemos'
+		'potomo'
 	]);
 
 	grunt.registerTask( 'compress', function () {

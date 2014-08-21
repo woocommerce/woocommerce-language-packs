@@ -13,7 +13,8 @@
     "grunt": "~0.4.5",
     "grunt-shell": "^0.7.0",
     "grunt-wget": "^0.1.2",
-    "node-zip": "^1.1.0"
+    "node-zip": "^1.1.0",
+    "grunt-potomo": "^2.1.0"
   },
   "engines": {
     "node": ">=0.8.0",
