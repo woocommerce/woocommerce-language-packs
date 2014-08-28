@@ -27,10 +27,10 @@ module.exports = function( grunt ){
 
 		potomo: {
 			dist: {
-			options: {
-				poDel: false
-			},
-			files: [{
+				options: {
+					poDel: false
+				},
+				files: [{
 					expand: true,
 					cwd: 'languages/',
 					src: ['*.po'],
