@@ -26,18 +26,30 @@ module.exports = function( grunt ){
 		},
 
 		potomo: {
+			options: {
+				poDel: false
+			},
 			dist: {
-				options: {
-					poDel: false
-				},
 				files: [{
 					expand: true,
 					cwd: 'languages/',
-					src: ['*.po'],
+					src: [
+						'*.po',
+						'!*-zh_CN.GB2312.po',
+						'!*-zh_TW.Big5.po'
+					],
 					dest: 'languages/',
 					ext: '.mo',
 					nonull: true
 				}]
+			},
+			special: {
+				files: {
+					'languages/woocommerce-zh_CN.GB2312.mo': 'languages/woocommerce-zh_CN.GB2312.po',
+					'languages/woocommerce-admin-zh_CN.GB2312.mo': 'languages/woocommerce-admin-zh_CN.GB2312.po',
+					'languages/woocommerce-zh_TW.Big5.mo': 'languages/woocommerce-zh_TW.Big5.po',
+					'languages/woocommerce-admin-zh_TW.Big5.mo': 'languages/woocommerce-admin-zh_TW.Big5.po'
+				}
 			}
 		}
 	});
